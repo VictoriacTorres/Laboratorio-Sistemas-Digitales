@@ -1,0 +1,269 @@
+;;*Programa DEMO: Encender y apagar un LED con con un retardo
+
+;*******************************************************************
+;* This stationery serves as the framework for a user application. *
+;* For a more comprehensive program that demonstrates the more     *
+;* advanced functionality of this processor, please see the        *
+;* demonstration applications, located in the examples             *
+;* subdirectory of the "Freescale CodeWarrior for HC08" program    *
+;* directory.                                                      *
+;*******************************************************************
+
+; Include derivative-specific definitions
+            INCLUDE 'derivative.inc'
+; export symbols
+            XDEF _Startup, main
+            ; we export both '_Startup' and 'main' as symbols. Either can
+            ; be referenced in the linker .prm file or from C/C++ later on
+
+            XREF __SEG_END_SSTACK   ; symbol defined by the linker for the end of the stack
+
+
+; variable/data section
+MY_ZEROPAGE: SECTION  SHORT         ; Insert here your data definition
+ciclo		ds 1			    ; defino una variable para el usar con el retardo
+min0		ds 1
+min1		ds 1
+seg0		ds 1
+seg1		ds 1
+IXAUX		ds 2
+estado      ds 1
+
+; code section
+MyCode:     SECTION
+main:
+_Startup:
+            LDHX   #__SEG_END_SSTACK ; initialize the stack pointer
+            TXS
+                                ; enable interrupts
+			
+			LDA #%11111111		; habilito los display
+            STA PTBDD
+            STA PTBPE  			; no se toca
+            
+            LDA #%00000000 		;habilito los switches como entrada
+            STA PTCDD
+            
+            LDA #%11  			; habilito el deco
+            STA PTADD
+            
+            CLR seg0
+            CLR seg1
+            CLR min0
+            CLR min1
+            clr estado
+            CLRA
+            
+            CLR RTCMOD  ;que cuente desde 0 el RTC  
+			LDA #$9F    
+			STA RTCSC   ;configuro la interrupción 
+			
+			CLI
+			
+mainLoop:
+          	NOP
+          
+          
+           	BRCLR 2,PTCD, cam1
+           	BRSET 2,PTCD,cam2
+           	
+cam1		BRCLR 3,PTCD, reset
+			BRSET 3, PTCD, cuenta
+			
+cam2 		BRCLR 3,PTCD, para
+			BRSET 3,PTCD, seguir
+					
+           	feed_watchdog
+			BRA    mainLoop
+
+;*********************; 
+
+cuenta	MOV #$01,estado
+		JSR mostrar 
+		BRA    mainLoop
+
+para	CLR estado
+		JSR mostrar
+		BRA    mainLoop
+
+reset 	CLR estado
+		CLR seg0
+       	CLR seg1
+       	CLR min0
+       	CLR min1
+       	CLRA 
+       	JSR mostrar
+       	BRA    mainLoop    
+
+seguir 	JSR mostrar
+		BRA    mainLoop
+		
+		
+;******************************************* RUTINA MOSTRAR		
+mostrar                   
+vol		LDA seg0
+		LDHX #tabla
+		STHX IXAUX
+		ADD IXAUX+1
+		STA IXAUX+1
+		LDA IXAUX
+		ADC #$00
+		STA IXAUX
+		LDHX IXAUX
+			
+		
+		LDA #%00   ; habilito el display 0
+		STA PTAD	
+		LDA 0,X    ; muestro el número en el display 0
+		STA PTBD 
+
+		jsr delay   ; delay para mostrar
+				
+		lda seg1
+		LDHX #tabla
+		STHX IXAUX
+		ADD IXAUX+1
+		STA IXAUX+1
+		LDA IXAUX
+		ADC #$00
+		STA IXAUX
+		LDHX IXAUX
+		
+		LDA 0,X
+		STA PTBD
+		LDA #%01
+		STA PTAD
+
+		jsr delay
+		
+    	lda min0
+    	LDHX #tabla
+		STHX IXAUX
+		ADD IXAUX+1
+		STA IXAUX+1
+		LDA IXAUX
+		ADC #$00
+		STA IXAUX
+		LDHX IXAUX
+		
+		LDA 0,X
+		INCA        ; DOT PRENDIDO
+		STA PTBD
+		LDA #%10
+		STA PTAD		
+	
+		jsr delay
+	
+		
+		LDA min1
+		LDHX #tabla
+		STHX IXAUX
+		ADD IXAUX+1
+		STA IXAUX+1
+		LDA IXAUX
+		ADC #$00
+		STA IXAUX
+		LDHX IXAUX
+		
+		
+		LDA 0,X
+		STA PTBD
+		LDA #%11
+		STA PTAD
+		
+		JSR delay
+
+		RTS
+		
+;******************;; delay de 2ms aprox
+
+delay       
+                                       
+		LDA #1			
+		STA ciclo	
+		
+			 				   
+vol1	feed_watchdog			
+		LDA #40               
+       	LDHX #255     
+leep   	DBNZX leep             
+       	DBNZA leep             
+	
+       	DEC ciclo
+       	BNE vol1
+       	RTS		       		
+		
+
+;*****************interrupción
+isrrtc
+     
+   	
+		BSET 7,RTCSC ;empieza la int poniendo el MSB en 1
+		lda estado
+		beq fin
+
+			            
+incs0		LDA seg0
+	        INCA 
+	        CMPA #$A
+	        BEQ incs1
+	        STA seg0              
+          	RTI
+            
+incs1		CLRA
+			STA seg0
+			LDA seg1
+			INCA
+			CMPA #$6
+			BEQ incm0
+			STA seg1
+			RTI
+			
+incm0		CLRA
+			STA seg1
+			LDA min0	
+			INCA
+		    CMPA #$A
+		    BEQ incm1
+		    STA min0
+		    RTI
+		    
+incm1		CLRA
+			STA min0
+			LDA min1
+			INCA
+			CMPA #$6
+			BEQ res
+
+			STA min1
+			rti
+			
+res			CLR seg0
+	       	CLR seg1
+       		CLR min0
+       		CLR min1
+       		CLRA 
+			
+			
+fin			RTI	
+		
+;***************************** tabla para pasar a 7 segmentos 
+
+tabla
+		FCB %10111110 ;=0
+        FCB %00000110 ;=1
+        FCB %11011010 ;=2
+        FCB %11001110 ;=3
+        FCB %01100110 ;=4
+        FCB %11101100 ;=5
+        FCB %11111100 ;=6
+        FCB %10000110 ;=7
+        FCB %11111110 ;=8
+        FCB %11101110 ;=9
+        FCB %10000000 ;=Dot
+        
+;**************************** guarda la subrutina de interrupción en un lugar de memoria predefinido por el micro        
+	
+		ORG Vrtc   
+		FDB isrrtc
+            
