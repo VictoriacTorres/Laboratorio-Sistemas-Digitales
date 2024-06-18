@@ -1,0 +1,196 @@
+
+PROGRAM "C:\Users\usuario\Desktop\ProyectoCG\Project_2\bin\Project.abs"
+
+*********************************************************************************************
+TARGET SECTION
+---------------------------------------------------------------------------------------------
+Processor   : Freescale HC08
+Memory Model: SMALL
+File Format : ELF\DWARF 2.0
+Linker      : SmartLinker V-5.0.37 Build 9279, Oct  7 2009
+
+*********************************************************************************************
+FILE SECTION
+---------------------------------------------------------------------------------------------
+main.asm.o                              Model: SMALL,         Lang: Assembler
+
+*********************************************************************************************
+STARTUP SECTION
+---------------------------------------------------------------------------------------------
+Entry point: 0xE000 (_Startup)
+
+*********************************************************************************************
+SECTION-ALLOCATION SECTION
+Section Name                    Size  Type     From       To       Segment
+---------------------------------------------------------------------------------------------
+.init                            318     R     0xE000     0xE13D   ROM
+MY_ZEROPAGE                        8   R/W       0x80       0x87   Z_RAM
+main.asm__ORG00001                 2     R     0xFFCC     0xFFCD   .absSeg0
+.stack                            64   R/W      0x100      0x13F   RAM
+.vectSeg1_vect                     2     R     0xFFFE     0xFFFF   .vectSeg1
+
+Summary of section sizes per section type:
+READ_ONLY (R):         142 (dec:      322)
+READ_WRITE (R/W):       48 (dec:       72)
+
+*********************************************************************************************
+VECTOR-ALLOCATION SECTION
+    Address     InitValue   InitFunction
+---------------------------------------------------------------------------------------------
+     0xFFFE        0xE000   _Startup
+
+*********************************************************************************************
+OBJECT-ALLOCATION SECTION
+     Name               Module                 Addr   hSize   dSize     Ref    Section   RLIB
+---------------------------------------------------------------------------------------------
+MODULE:                 -- main.asm.o --
+- PROCEDURES:
+     _Startup                                  E000      25      37       0   .init       
+     main                                      E000       0       0       0   .init       
+     mainLoop                                  E025       A      10       0   .init       
+     cam1                                      E02F       6       6       0   .init       
+     cam2                                      E035      10      16       0   .init       
+     cuenta                                    E045       5       5       0   .init       
+     para                                      E04A       4       4       0   .init       
+     reset                                     E04E       D      13       0   .init       
+     mostrar                                   E05B      76     118       1   .init       
+     delay                                     E0D1       4       4       4   .init       
+     vol1                                      E0D5      10      16       0   .init       
+     leep                                      E0E5       9       9       0   .init       
+     isrrtc                                    E0EE      10      16       1   .init       
+     incs1                                     E0FE      11      17       0   .init       
+     incm0                                     E10F       D      13       0   .init       
+     incm1                                     E11C       D      13       0   .init       
+     res                                       E129       9       9       0   .init       
+     fin                                       E132       1       1       0   .init       
+     VAR00001                                  E133       1       1       4   .init       
+     VAR00002                                  E134       1       1       0   .init       
+     VAR00003                                  E135       1       1       0   .init       
+     VAR00004                                  E136       1       1       0   .init       
+     VAR00005                                  E137       1       1       0   .init       
+     VAR00006                                  E138       1       1       0   .init       
+     VAR00007                                  E139       1       1       0   .init       
+     VAR00008                                  E13A       1       1       0   .init       
+     VAR00009                                  E13B       1       1       0   .init       
+     VAR00010                                  E13C       1       1       0   .init       
+     VAR00011                                  E13D       1       1       0   .init       
+- VARIABLES:
+     ciclo                                       80       1       1       2   MY_ZEROPAGE 
+     min0                                        81       1       1       7   MY_ZEROPAGE 
+     min1                                        82       1       1       6   MY_ZEROPAGE 
+     seg0                                        83       1       1       7   MY_ZEROPAGE 
+     seg1                                        84       1       1       7   MY_ZEROPAGE 
+     IXAUX                                       85       2       2      24   MY_ZEROPAGE 
+     estado                                      87       1       1       5   MY_ZEROPAGE 
+     VAR00012                                  FFCC       2       2       0   .text       
+- LABELS:
+     __SEG_END_SSTACK                           140       0       0       1               
+
+*********************************************************************************************
+MODULE STATISTIC
+  Name                                      Data   Code  Const
+---------------------------------------------------------------------------------------------
+  main.asm.o                                   8    318      2
+  other                                       64      2      0
+
+*********************************************************************************************
+SECTION USE IN OBJECT-ALLOCATION SECTION
+---------------------------------------------------------------------------------------------
+SECTION: ".text"
+  VAR00012 
+SECTION: ".init"
+  main _Startup mainLoop cam1 cam2 cuenta para reset mostrar delay vol1 leep 
+  isrrtc incs1 incm0 incm1 res fin VAR00001 VAR00002 VAR00003 VAR00004 VAR00005 
+  VAR00006 VAR00007 VAR00008 VAR00009 VAR00010 VAR00011 
+SECTION: "MY_ZEROPAGE"
+  ciclo min0 min1 seg0 seg1 IXAUX estado 
+
+*********************************************************************************************
+OBJECT LIST SORTED BY ADDRESS
+     Name                                      Addr   hSize   dSize     Ref    Section   RLIB
+---------------------------------------------------------------------------------------------
+     ciclo                                       80       1       1       2   MY_ZEROPAGE 
+     min0                                        81       1       1       7   MY_ZEROPAGE 
+     min1                                        82       1       1       6   MY_ZEROPAGE 
+     seg0                                        83       1       1       7   MY_ZEROPAGE 
+     seg1                                        84       1       1       7   MY_ZEROPAGE 
+     IXAUX                                       85       2       2      24   MY_ZEROPAGE 
+     estado                                      87       1       1       5   MY_ZEROPAGE 
+     main                                      E000       0       0       0   .init       
+     _Startup                                  E000      25      37       0   .init       
+     mainLoop                                  E025       A      10       0   .init       
+     cam1                                      E02F       6       6       0   .init       
+     cam2                                      E035      10      16       0   .init       
+     cuenta                                    E045       5       5       0   .init       
+     para                                      E04A       4       4       0   .init       
+     reset                                     E04E       D      13       0   .init       
+     mostrar                                   E05B      76     118       1   .init       
+     delay                                     E0D1       4       4       4   .init       
+     vol1                                      E0D5      10      16       0   .init       
+     leep                                      E0E5       9       9       0   .init       
+     isrrtc                                    E0EE      10      16       1   .init       
+     incs1                                     E0FE      11      17       0   .init       
+     incm0                                     E10F       D      13       0   .init       
+     incm1                                     E11C       D      13       0   .init       
+     res                                       E129       9       9       0   .init       
+     fin                                       E132       1       1       0   .init       
+     VAR00001                                  E133       1       1       4   .init       
+     VAR00002                                  E134       1       1       0   .init       
+     VAR00003                                  E135       1       1       0   .init       
+     VAR00004                                  E136       1       1       0   .init       
+     VAR00005                                  E137       1       1       0   .init       
+     VAR00006                                  E138       1       1       0   .init       
+     VAR00007                                  E139       1       1       0   .init       
+     VAR00008                                  E13A       1       1       0   .init       
+     VAR00009                                  E13B       1       1       0   .init       
+     VAR00010                                  E13C       1       1       0   .init       
+     VAR00011                                  E13D       1       1       0   .init       
+     VAR00012                                  FFCC       2       2       0   .text       
+
+*********************************************************************************************
+UNUSED-OBJECTS SECTION
+---------------------------------------------------------------------------------------------
+
+*********************************************************************************************
+COPYDOWN SECTION
+---------------------------------------------------------------------------------------------
+
+*********************************************************************************************
+OBJECT-DEPENDENCIES SECTION
+---------------------------------------------------------------------------------------------
+_Startup                  USES __SEG_END_SSTACK seg0 seg1 min0 min1 estado 
+mainLoop                  USES mostrar 
+cuenta                    USES estado 
+para                      USES estado 
+reset                     USES estado seg0 seg1 min0 min1 
+mostrar                   USES seg0 VAR00001 IXAUX delay seg1 min0 min1 
+delay                     USES ciclo 
+leep                      USES ciclo 
+isrrtc                    USES estado seg0 
+incs1                     USES seg0 seg1 
+incm0                     USES seg1 min0 
+incm1                     USES min0 min1 
+res                       USES seg0 seg1 min0 min1 
+
+*********************************************************************************************
+DEPENDENCY TREE
+*********************************************************************************************
+ main and _Startup Group
+ | 
+ +- main                
+ |    
+ +- _Startup            
+      
+ _ORG00001           
+ | 
+ +- isrrtc              
+      
+*********************************************************************************************
+STATISTIC SECTION
+---------------------------------------------------------------------------------------------
+
+ExeFile:
+--------
+Number of blocks to be downloaded: 3
+Total size of all blocks to be downloaded: 322
+
